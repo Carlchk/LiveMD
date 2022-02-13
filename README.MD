@@ -1,19 +1,40 @@
 # Welcome to LiveMD
 
+
 ![image](/livemd-webapp/src/component/Logo.svg)
 
-> LiveMD is a collaborative real-time markdown editor that built with React.js, allows you to edit together in **real-time** with easy sharing and use comments, suggestions, and action items to keep things moving. 
+> ⚠️ This markdown file is written with LiveMD ⚠️
 
-### Feature:
+## What is LiveMD
 
-- Design for programmer
+LiveMD is a collaborative real-time markdown editor that built with React.js, allows you to edit a markdown file together in **real-time**.
+
+online demo are coming !!
+
+## Implementation
+
+
+|       |  |
+| ----------- | ----------- |
+| Frontend      | React.js + Tailwindcss + quill       |
+| Backend   | Express + socket.io + Auth0         |
+| Database   | (no-SQL) MongoDB        |
+
+
+## Feature:
+
+- Design for programmer <3
 - Live editing with others
-- Stroage for your markdown documents
+- Storage for your markdown documents
+- Seamless Live Preview
 
 
-### Screenshots:
+## Screenshots:
 
-Update
+#### Collaborative real-time editing
 
+![LiveMD-file-display](/img/LiveMD-coop-demo.gif)
 
-##### ⚠️ This markdown file is written with LiveMD ⚠️
+#### Support file Storage
+
+![LiveMD-file-display](/img/LiveMD-file-display.png)
