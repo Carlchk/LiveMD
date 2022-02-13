@@ -1,5 +1,4 @@
 const mongoose = require("mongoose")
-const http = require("http")
 const Document = require("./Document")
 
 const app = require('express')();
@@ -26,7 +25,6 @@ mongoose.connect("mongodb://user:1234@localhost/livemd", {
 })
 
 
-
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization']
   var cert = fs.readFileSync('livemd-us.pem');
@@ -47,28 +45,26 @@ app.post('/jwt', authenticateToken, async (req, res) => {
 
 
 app.get('/getDocument', authenticateToken, function (req, res) {
-  // res.type('text/plain');
   const userid = req.sub
   const query = Document.find({ owner: userid });
   query.select('id name createdAt updatedAt');
 
-  // const document = await Document
   query.sort([['updatedAt', -1]]).exec(function (err, result) {
     if (err) return handleError(err);
-    // athletes contains an ordered list of 5 athletes who play Tennis
     res.status(200).send(result);
   })
 
 })
 
 app.delete('/deleteDocument', (req, res) => {
-
+  // TODO: delete document 
+  res.status(200).send("Coming")
 })
 
 var onlineUser = {}
 io.on("connection", socket => {
   socket.on("get-document", async ({ documentId, userData }) => {
-    const document = await findOrCreateDocument(documentId, userData.userid)
+    const document = await findOrCreateDocument(documentId, userData.sub)
 
     if (onlineUser[documentId] === undefined) {
       onlineUser[documentId] = {}
