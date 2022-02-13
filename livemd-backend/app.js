@@ -73,9 +73,8 @@ io.on("connection", socket => {
     if (onlineUser[documentId] === undefined) {
       onlineUser[documentId] = {}
     }
-    onlineUser[documentId][userData.sub] = { userid: userData.sub, user_pic: userData.picture }
-    // console.log(onlineUser)
 
+onlineUser[documentId][userData.sub] = { userid: userData.sub, user_pic: userData.picture }
     socket.join(documentId)
 
     socket.emit("load-document", document)
@@ -86,8 +85,7 @@ io.on("connection", socket => {
       socket.broadcast.to(documentId).emit("receive-changes", { delta, onlineUser: onlineUserByDocument })
     })
 
-    socket.broadcast.to(documentId).emit("receive-changes-on-online-user", { onlineUser:  Object.values(onlineUser[documentId]) })
-
+    socket.broadcast.to(documentId).emit("receive-changes-on-online-user", { onlineUser: Object.values(onlineUser[documentId]) })
 
     socket.on("save-document", async ({ data }) => {
       // await console.log(req)
@@ -97,8 +95,15 @@ io.on("connection", socket => {
     socket.on("send-document-name-changes", async ({ documentName }) => {
       const onlineUserByDocument = Object.values(onlineUser[documentId])
       socket.broadcast.to(documentId).emit("receive-document-name-changes", { documentName, onlineUser: onlineUserByDocument })
+      if (document === null) return
       await Document.findByIdAndUpdate(documentId, { name: documentName })
     })
+
+    socket.on('disconnect', () => {
+      console.log(`user ${userData.sub} Disconnected`);
+      delete onlineUser[documentId][userData.sub]
+      socket.broadcast.to(documentId).emit("receive-changes-on-online-user", { onlineUser: Object.values(onlineUser[documentId]) })
+    });
   })
 })
 

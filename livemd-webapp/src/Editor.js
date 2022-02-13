@@ -73,7 +73,7 @@ function Editor() {
             setOnlineUser(onlineUser)
         }
         socket.on("receive-changes-on-online-user", handler)
-    }, [socket,quill])
+    }, [socket, quill])
 
     useEffect(() => {
         if (socket == null || quill == null) return
@@ -158,9 +158,9 @@ function Editor() {
         setQuill(q)
     }, [])
 
+
     return (
         <>{isLoading ? <><Spinner />Loading...</> : <>
-            {/* <EditorNavbar docName={documentName} /> */}
             <EditorNavbar documentName={documentName} setDocumentName={setDocumentName} onlineUser={onlineUser} />
             <container class="grid grid-cols-2 gap-4 h-screen divide-x-2">
                 <div className="container" ref={wrapperRef}></div>

@@ -30,7 +30,6 @@ function EditorNavbar({ documentName, setDocumentName, onlineUser }) {
                         </div>
                         <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                             <div className="flex -space-x-2 overflow-hidden mr-4">
-                                {/* {console.log(onlineUser)} */}
                                 {onlineUser?.map((e) => {
                                     return <img
                                         className="inline-block h-8 w-8 rounded-full ring-2 ring-white"
