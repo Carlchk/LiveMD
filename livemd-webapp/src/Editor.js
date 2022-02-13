@@ -26,11 +26,12 @@ function Editor() {
     const [documentName, setDocumentName] = useState("")
     const [onlineUser, setOnlineUser] = useState([])
 
-
     const { isLoading, user } = useAuth0();
 
+    const SERVER_URL = process.env.REACT_APP_SERVER_URL
+
     useEffect(() => {
-        const s = io("http://localhost:3001")
+        const s = io(SERVER_URL)
         setSocket(s)
 
         return () => {

@@ -9,10 +9,13 @@ export default function File() {
     const [Loading, setLoading] = useState(true)
     const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
     const [userMetadata, setUserMetadata] = useState(null);
+    
+    const domain = process.env.REACT_APP_AUTH0_DOMAIN
+    const SERVER_URL = process.env.REACT_APP_SERVER_URL
 
     useEffect(() => {
         const getUserMetadata = async () => {
-            const domain = process.env.REACT_APP_AUTH0_DOMAIN
+            
 
             try {
                 const accessToken = await getAccessTokenSilently({
@@ -20,7 +23,7 @@ export default function File() {
                     scope: "read:current_user",
                 });
 
-                await fetch("http://localhost:3001/getDocument", {
+                await fetch(`${SERVER_URL}/getDocument`, {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
                     },
@@ -28,7 +31,6 @@ export default function File() {
                     .then(res => res.json())
                     .then((data) => {
                         setFiles(data)
-                        console.log(data)
                         setLoading(false)
                     })
             } catch (e) {
@@ -47,18 +49,28 @@ export default function File() {
         } else if (hours >= 1 && hours <= 23) {
             statement = `You edited this ${hours} hours ago`
         } else {
-            statement = `You edited this ${hours / 24} days ago`
+            statement = `You edited this ${Math.round(hours / 24)} days ago`
         }
         return statement
     }
 
+    const rightclick = () => {
+        var rightclick;
+        var e = window.event;
+        console.log(e)
+        // if (e.which) rightclick = (e.which == 3);
+        // else if (e.button) rightclick = (e.button == 2);
+        // alert(rightclick); // true or false, you can trap right click here by if comparison
+    }
+
     const DocumentCard = ({ title, _id, createdAt, updatedAt }) => {
+        // document.addEventListener("contextmenu", ()=>{console.log(_id)});
         return (
             <div class="p-4">
                 <a href={`/editor/${_id}`} class="block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 hover:border-blue-600 hover:shadow-blue-500/50">
                     <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{title}</h5>
                     <p class="font-normal text-gray-700 dark:text-gray-400">
-                        Created at: {moment(createdAt).format('YY/MM/DD hh:mm')}
+                        Created at: {moment(createdAt).format('DD/MM/YYYY hh:mm')}
                     </p>
                     <p class="font-normal text-gray-400 dark:text-gray-400 mt-4">
                         {computeLastUpdateState(updatedAt)}
@@ -93,7 +105,7 @@ export default function File() {
                 <div class="grid grid-cols-3 gap-4 ">
                     <AddNewDocument />
                     {files.map((e) => {
-                        return <DocumentCard title={e.name} _id={e._id} createdAt={e.createdAt} updatedAt={e.updatedAt} />
+                        return <DocumentCard id={e._id} title={e.name} _id={e._id} createdAt={e.createdAt} updatedAt={e.updatedAt} onContextMenu={console.log(e._id)} />
                     })}
                 </div>
 
